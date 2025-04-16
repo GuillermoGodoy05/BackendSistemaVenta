@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SistemaVenta.DAL.DBContext;
+using SistemaVenta.DAL.Repositorios.Contrato;
+using SistemaVenta.DAL.Repositorios;
 
 
 
@@ -21,7 +23,11 @@ namespace SistemaVenta.IOC
                 options.UseSqlServer(configuration.GetConnectionString("CadenaSQL"));
             });
 
-
+            // Devuelve una referencia de las instancias mencionadas en los typeof ( <> significa de cualquier modelo)
+                        //instancia en cada resolución (transient)
+                        //instancia en cada solicitud (scoped)
+            services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));   
+            services.AddScoped<IVentaRepository, VentaRepository>();
         }
         
 
