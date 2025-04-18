@@ -10,6 +10,7 @@ using SistemaVenta.DAL.DBContext;
 using SistemaVenta.DAL.Repositorios.Contrato;
 using SistemaVenta.DAL.Repositorios;
 
+using SistemaVenta.Utility;
 
 
 namespace SistemaVenta.IOC
@@ -28,6 +29,9 @@ namespace SistemaVenta.IOC
                         //instancia en cada solicitud (scoped)
             services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));   
             services.AddScoped<IVentaRepository, VentaRepository>();
+
+            services.AddAutoMapper(typeof(AutoMapperProfile));
+
         }
         
 
