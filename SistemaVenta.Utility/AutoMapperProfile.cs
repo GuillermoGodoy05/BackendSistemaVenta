@@ -35,7 +35,7 @@ namespace SistemaVenta.Utility
                 );
 
             // de Usuario a Sesión / OPT DE OPTIONS 
-            CreateMap<Usuario, SesionDTO>() // <origen, destino>
+            CreateMap<Usuario, SesionDTO>() 
                 .ForMember(destino =>
                     destino.RolDescripcion,
                     opt => opt.MapFrom(origen => origen.IdRolNavigation.Nombre)
@@ -43,7 +43,7 @@ namespace SistemaVenta.Utility
 
             // de UsusarioDto a Usuario
 
-            CreateMap<UsuarioDTO, Usuario>() // <origen, destino>
+            CreateMap<UsuarioDTO, Usuario>()
                 .ForMember(destino =>
                     destino.IdRolNavigation,
                     opt => opt.Ignore()
