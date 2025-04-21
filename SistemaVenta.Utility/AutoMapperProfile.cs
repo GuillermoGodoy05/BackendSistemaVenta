@@ -13,6 +13,7 @@ namespace SistemaVenta.Utility
 {
     public class AutoMapperProfile : Profile
     {
+        // Automapper convierte de dto a modelo y de modelo a dto
         public AutoMapperProfile()
         {
             #region Rol
