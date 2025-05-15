@@ -226,7 +226,8 @@ public partial class DbventaContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("numeroDocumento");
             entity.Property(e => e.TipoPago)
-                .HasColumnType("decimal(10, 2)")
+                .HasColumnType("varchar(50)")
+                .IsUnicode(false) 
                 .HasColumnName("tipoPago");
             entity.Property(e => e.Total)
                 .HasColumnType("decimal(10, 2)")

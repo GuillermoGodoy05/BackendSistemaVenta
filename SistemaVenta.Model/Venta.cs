@@ -9,7 +9,7 @@ public partial class Venta
 
     public string? NumeroDocumento { get; set; }
 
-    public decimal? TipoPago { get; set; }
+    public string? TipoPago { get; set; }
 
     public decimal? Total { get; set; }
 
