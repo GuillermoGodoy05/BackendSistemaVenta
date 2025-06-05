@@ -53,6 +53,16 @@ namespace SistemaVenta.Utility
                     destino.EsActivo,
                     opt => opt.MapFrom(origen => origen.EsActivo == 1 ? true : false)
                 );
+
+                CreateMap<UsuarioCrearDTO, Usuario>()
+                .ForMember(destino =>
+                    destino.IdRolNavigation,
+                    opt => opt.Ignore()
+                )
+                .ForMember(destino =>
+                    destino.EsActivo,
+                    opt => opt.MapFrom(origen => origen.EsActivo == 1 ? true : false)
+                );
             #endregion Usuario
 
             #region Categoria

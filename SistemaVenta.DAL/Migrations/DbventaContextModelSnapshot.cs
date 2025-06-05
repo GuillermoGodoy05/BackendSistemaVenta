@@ -263,9 +263,9 @@ namespace SistemaVenta.DAL.Migrations
 
                     b.Property<string>("Clave")
                         .IsRequired()
-                        .HasMaxLength(40)
+                        .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(40)")
+                        .HasColumnType("varchar(100)")
                         .HasColumnName("clave");
 
                     b.Property<string>("Correo")

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SistemaVenta.Model;
 
@@ -12,7 +13,7 @@ public partial class Usuario
     public string Correo { get; set; } = null!;
 
     public int? IdRol { get; set; }
-
+    [MaxLength(100)]
     public string Clave { get; set; } = null!;
 
     public bool? EsActivo { get; set; }

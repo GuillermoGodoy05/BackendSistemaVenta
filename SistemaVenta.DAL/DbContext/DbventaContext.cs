@@ -187,7 +187,7 @@ public partial class DbventaContext : DbContext
 
             entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
             entity.Property(e => e.Clave)
-                .HasMaxLength(40)
+                .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("clave");
             entity.Property(e => e.Correo)

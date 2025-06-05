@@ -35,10 +35,11 @@ namespace SistemaVenta.BLL.Servicios
                 var listaUsuarios = queryUsuario.Include(rol => rol.IdRolNavigation).ToList();  
                 return _mapper.Map<List<UsuarioDTO>>(listaUsuarios);
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.InnerException?.Message ?? ex.Message);
             }
+
         }
         public async Task<SesionDTO> ValidarCredenciales(string correo, string clave)
         {
@@ -46,30 +47,47 @@ namespace SistemaVenta.BLL.Servicios
             try
             {
                 var queryUsuario = await _usuarioRepositorio.Consultar( u =>
-                    u.Correo == correo &&
-                    u.Clave == clave
+                    u.Correo == correo
                 );
 
-                if(queryUsuario.FirstOrDefault() == null) throw new TaskCanceledException("El usuario no existe");    
+                var usuario = await queryUsuario.Include(u => u.IdRolNavigation).FirstOrDefaultAsync();
+
+                if (usuario == null)
+                    throw new TaskCanceledException("El usuario no existe");
+
+                // Verificar la clave con BCrypt
+                bool claveValida = BCrypt.Net.BCrypt.Verify(clave, usuario.Clave);
+
+                if (!claveValida)
+                    throw new TaskCanceledException("Contraseña incorrecta");
+
+                if (queryUsuario.FirstOrDefault() == null) throw new TaskCanceledException("El usuario no existe");    
 
                 // Se añade el rol al usuario - First porque seguro hay info 
                 Usuario usuarioCompleto = queryUsuario.Include(rol => rol.IdRolNavigation).First();
                                 
                 return _mapper.Map<SesionDTO>(usuarioCompleto);
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.InnerException?.Message ?? ex.Message);
             }
 
+
         }
-        public async Task<UsuarioDTO> Crear(UsuarioDTO modelo)
+        public async Task<UsuarioDTO> Crear(UsuarioCrearDTO modelo)
         {
             try
             {
+                modelo.Clave = BCrypt.Net.BCrypt.HashPassword(modelo.Clave);
+
                 var usuarioCreado = await _usuarioRepositorio.Crear(_mapper.Map<Usuario>(modelo));
+                /*var existe = await _usuarioRepositorio.Obtener(u => u.Correo == modelo.Correo);*/
 
                 if (usuarioCreado.IdUsuario == 0) throw new TaskCanceledException("No se puedo crear");
+                
+               /* if (existe != null)
+                    throw new TaskCanceledException("Ya existe un usuario con ese correo");*/
 
                 var query = await _usuarioRepositorio.Consultar(u => u.IdUsuario == usuarioCreado.IdUsuario);
 
@@ -77,10 +95,11 @@ namespace SistemaVenta.BLL.Servicios
 
                 return _mapper.Map<UsuarioDTO>(usuarioCreado);
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.InnerException?.Message ?? ex.Message);
             }
+
 
         }
 
@@ -89,7 +108,7 @@ namespace SistemaVenta.BLL.Servicios
             try
             {
                 var usuarioModelo = _mapper.Map<Usuario>(modelo);
-                                
+
                 var usuarioEncontrado = await _usuarioRepositorio.Obtener(u => u.IdUsuario == usuarioModelo.IdUsuario);
 
                 if (usuarioEncontrado == null) throw new TaskCanceledException("El usuario no existe");
@@ -97,20 +116,25 @@ namespace SistemaVenta.BLL.Servicios
                 usuarioEncontrado.NombreCompleto = usuarioModelo.NombreCompleto;
                 usuarioEncontrado.Correo = usuarioModelo.Correo;
                 usuarioEncontrado.IdRol = usuarioModelo.IdRol;
-                usuarioEncontrado.Clave = usuarioModelo.Clave;
+
+                if (!string.IsNullOrEmpty(usuarioModelo.Clave))
+                {
+                    usuarioEncontrado.Clave = BCrypt.Net.BCrypt.HashPassword(usuarioModelo.Clave);
+                }
+
                 usuarioEncontrado.EsActivo = usuarioModelo.EsActivo;
 
                 bool respuesta = await _usuarioRepositorio.Editar(usuarioEncontrado);
 
                 if (!respuesta) throw new TaskCanceledException("No se pudo editar");
 
-
                 return respuesta;
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.InnerException?.Message ?? ex.Message);
             }
+
         }
 
         public async Task<bool> Eliminar(int id)
@@ -127,13 +151,14 @@ namespace SistemaVenta.BLL.Servicios
 
                 return respuesta;
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.InnerException?.Message ?? ex.Message);
             }
+
         }
 
 
-       
+
     }
 }

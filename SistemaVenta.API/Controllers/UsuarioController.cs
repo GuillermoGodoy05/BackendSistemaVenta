@@ -61,7 +61,7 @@ namespace SistemaVenta.API.Controllers
 
         [HttpPost]
         [Route("GuardarUsuario")]
-        public async Task<IActionResult> GuardarUsuario([FromBody] UsuarioDTO usuario)
+        public async Task<IActionResult> GuardarUsuario([FromBody] UsuarioCrearDTO usuario)
         {
             var rsp = new Response<UsuarioDTO>();
 
