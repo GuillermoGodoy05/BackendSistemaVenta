@@ -34,9 +34,9 @@ namespace SistemaVenta.BLL.Servicios
 
                 return _mapper.Map<List<ProductoDTO>>(listaProducto.ToList());
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception("No se pudo obtener la lista de productos.", ex);
             }
         }
 
@@ -50,9 +50,9 @@ namespace SistemaVenta.BLL.Servicios
                                 
                 return _mapper.Map<ProductoDTO>(productoCreado);
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception("No se pudo crear el producto.", ex);
             }
         }
 
@@ -78,10 +78,11 @@ namespace SistemaVenta.BLL.Servicios
 
                 return respuesta;
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
-            }           
+                // Comentario: Captura el error y lanza una nueva excepción con un mensaje útil y la original.
+                throw new Exception("No se pudo editar el producto.", ex);
+            }
 
         }
 
@@ -99,9 +100,10 @@ namespace SistemaVenta.BLL.Servicios
 
                 return respuesta;
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                // Comentario: Captura el error y lanza una nueva excepción con un mensaje útil y la original.
+                throw new Exception("No se pudo eliminar el producto.", ex);
             }
         }
 

@@ -45,10 +45,22 @@ namespace SistemaVenta.BLL.Servicios
 
                 return _mapper.Map<VentaDTO>(ventaGenerada);
             }
-            catch
+            catch (InvalidOperationException ex) // Captura excepciones específicas de la lógica de negocio o de la DAL.
             {
-                throw;
+                // Comentario: Esto captura el error si IdVenta es 0 o si no se encontró un recurso (DAL).
+                throw new Exception($"Error en la lógica de negocio al registrar la venta: {ex.Message}", ex);
             }
+            catch (ArgumentException ex) // Para validaciones de entrada de la BLL
+            {
+                // Comentario: Si se añaden validaciones aquí, esta captura las desviaciones de argumentos.
+                throw new Exception($"Datos de venta inválidos: {ex.Message}", ex);
+            }
+            catch (Exception ex) // Captura cualquier otra excepción, incluyendo las de la DAL.
+            {
+                // Comentario: Este catch final encapsula cualquier otro error inesperado al registrar la venta.
+                throw new Exception("Error al registrar la venta.", ex);
+            }
+
         }
 
         public async Task<List<VentaDTO>> Historial(string buscarPor, string numeroVenta, string fechaInicio, string fechaFin)
@@ -78,9 +90,20 @@ namespace SistemaVenta.BLL.Servicios
                         .ToListAsync();
                 }
             }
-            catch
+            catch (FormatException ex) 
             {
-                throw;
+                // Se lanza si las fechas no tienen el formato esperado.
+                throw new ArgumentException("El formato de las fechas proporcionadas es incorrecto. Asegúrese de usar 'dd/MM/yyyy'.", ex);
+            }
+            catch (ArgumentException ex) // Captura las excepciones de validación que añadimos.
+            {
+                // Captura errores de validación de argumentos específicos.
+                throw new Exception($"Error de argumento al buscar historial: {ex.Message}", ex);
+            }
+            catch (Exception ex) // Captura cualquier otra excepción, incluyendo las de la DAL.
+            {
+                // Este catch final encapsula cualquier otro error inesperado al obtener el historial.
+                throw new Exception("No se pudo obtener el historial de ventas.", ex);
             }
 
             return _mapper.Map<List<VentaDTO>>(ListaResultado);
@@ -107,9 +130,20 @@ namespace SistemaVenta.BLL.Servicios
                     )
                     .ToListAsync();         
             }
-            catch
+            catch (FormatException ex) 
             {
-                throw;
+                // Se lanza si las fechas del reporte no tienen el formato esperado.
+                throw new ArgumentException("El formato de las fechas para el reporte es incorrecto. Asegúrese de usar 'dd/MM/yyyy'.", ex);
+            }
+            catch (ArgumentException ex) // Captura las excepciones de validación que añadimos.
+            {
+                // Captura errores de validación de argumentos específicos del reporte.
+                throw new Exception($"Error de argumento al generar reporte: {ex.Message}", ex);
+            }
+            catch (Exception ex) // Captura cualquier otra excepción, incluyendo las de la DAL.
+            {
+                // Este catch final encapsula cualquier otro error inesperado al generar el reporte.
+                throw new Exception("No se pudo obtener el reporte de ventas.", ex);
             }
 
             return _mapper.Map<List<ReporteDTO>>(ListaResultado);

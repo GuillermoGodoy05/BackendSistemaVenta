@@ -29,8 +29,9 @@ namespace SistemaVenta.BLL.Servicios
                 var listaRoles = await _rolRepositorio.Consultar();
                 return _mapper.Map<List<RolDTO>>(listaRoles.ToList());
             }
-            catch {
-                throw;
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudo obtener la lista de roles.", ex);
             }
 
         }

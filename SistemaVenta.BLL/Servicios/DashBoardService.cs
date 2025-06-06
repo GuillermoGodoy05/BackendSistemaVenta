@@ -120,9 +120,9 @@ namespace SistemaVenta.BLL.Servicios
                 vmDashboard.VentasUltimaSemana = listaVentaSemana;
 
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception("No se pudo generar el resumen del tablero.", ex);
             }
 
             return vmDashboard;

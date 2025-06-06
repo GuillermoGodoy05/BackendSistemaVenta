@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Microsoft.EntityFrameworkCore;
 using SistemaVenta.DAL.DBContext;
 using SistemaVenta.DAL.Repositorios.Contrato;
 using SistemaVenta.Model;
@@ -68,17 +68,28 @@ namespace SistemaVenta.DAL.Repositorios
 
                     transaction.Commit();
 
-                } catch{
+                }
+                catch (DbUpdateException ex) // Captura errores relacionados con la base de datos (Ej. stock negativo, FK, unicidad)
+                {
                     transaction.Rollback();
-                    throw;
+                    // Comentario: Lanza una excepción específica si hay un conflicto de base de datos durante el registro.
+                    throw new Exception("Error al registrar la venta debido a un conflicto de datos (ej. stock insuficiente, referencia inválida).", ex);
+                }
+                catch (InvalidOperationException ex) // Captura errores como .First() si no encuentra nada
+                {
+                    transaction.Rollback();
+                    // Comentario: Lanza una excepción si no se encontró un producto o correlativo requerido.
+                    throw new Exception("Error al registrar la venta: Recurso no encontrado (ej. producto inexistente, correlativo no configurado).", ex);
+                }
+                catch (Exception ex) // Captura cualquier otra excepción inesperada
+                {
+                    transaction.Rollback();
+                    // Comentario: Lanza una excepción genérica para cualquier otro error inesperado durante el registro de la venta.
+                    throw new Exception("Error inesperado al registrar la venta.", ex);
                 }
 
                 return ventaGenerada;
             }
-
-
-
-
 
         }
     }

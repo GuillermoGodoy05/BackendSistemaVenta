@@ -30,9 +30,10 @@ namespace SistemaVenta.BLL.Servicios
                 var listaCategoria = await _categoriaRepositorio.Consultar();
                 return _mapper.Map<List<CategoriaDTO>>(listaCategoria.ToList());
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                // Comentario: Captura el error y lanza una nueva excepción con un mensaje útil y la excepción original.
+                throw new Exception("No se pudo obtener la lista de categorías.", ex);
             }
         }
     }

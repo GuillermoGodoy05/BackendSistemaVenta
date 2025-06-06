@@ -27,8 +27,9 @@ namespace SistemaVenta.DAL.Repositorios
                 TModelo modelo = await _dbcontext.Set<TModelo>().FirstOrDefaultAsync(filtro);
                 return modelo;
             }
-            catch {
-                throw;
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener el registro de la base de datos.", ex);
             }
         }
 
@@ -41,9 +42,9 @@ namespace SistemaVenta.DAL.Repositorios
 
                 return modelo;
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception("Error al crear el registro en la base de datos.", ex);
             }
         }
         public async Task<bool> Editar(TModelo modelo)
@@ -54,9 +55,9 @@ namespace SistemaVenta.DAL.Repositorios
                 await _dbcontext.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception("Error al editar el registro en la base de datos.", ex);
             }
         }
 
@@ -68,9 +69,9 @@ namespace SistemaVenta.DAL.Repositorios
                 await _dbcontext.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception("Error al eliminar el registro de la base de datos.", ex);
             }
         }
 
@@ -84,9 +85,9 @@ namespace SistemaVenta.DAL.Repositorios
 
                 return queryModelo;
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception("Error al consultar registros de la base de datos.", ex);
             }
         }
 

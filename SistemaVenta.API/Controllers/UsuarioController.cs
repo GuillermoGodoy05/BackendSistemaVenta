@@ -29,13 +29,15 @@ namespace SistemaVenta.API.Controllers
             {
                 rsp.status = true;
                 rsp.value = await _usuarioServicio.Lista();
+                return Ok(rsp);
             }
             catch (Exception ex)
             {
                 rsp.status = false;
                 rsp.msg = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, rsp);
+
             }
-            return Ok(rsp);
         }
 
 
@@ -49,13 +51,15 @@ namespace SistemaVenta.API.Controllers
             {
                 rsp.status = true;
                 rsp.value = await _usuarioServicio.ValidarCredenciales(login.Correo, login.Clave);
+                return Ok(rsp);
             }
             catch (Exception ex)
             {
                 rsp.status = false;
                 rsp.msg = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, rsp);
+
             }
-            return Ok(rsp);
         }
 
 
@@ -69,13 +73,14 @@ namespace SistemaVenta.API.Controllers
             {
                 rsp.status = true;
                 rsp.value = await _usuarioServicio.Crear(usuario);
+                return Ok(rsp);
             }
             catch (Exception ex)
             {
                 rsp.status = false;
                 rsp.msg = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, rsp);
             }
-            return Ok(rsp);
         }
 
         [HttpPut]
@@ -88,13 +93,14 @@ namespace SistemaVenta.API.Controllers
             {
                 rsp.status = true;
                 rsp.value = await _usuarioServicio.Editar(usuario);
+                return Ok(rsp);
             }
             catch (Exception ex)
             {
                 rsp.status = false;
                 rsp.msg = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, rsp);
             }
-            return Ok(rsp);
         }
 
         [HttpDelete]
@@ -107,13 +113,14 @@ namespace SistemaVenta.API.Controllers
             {
                 rsp.status = true;
                 rsp.value = await _usuarioServicio.Eliminar(id);
+                return Ok(rsp);
             }
             catch (Exception ex)
             {
                 rsp.status = false;
                 rsp.msg = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, rsp);
             }
-            return Ok(rsp);
         }
 
 

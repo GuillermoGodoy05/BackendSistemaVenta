@@ -47,9 +47,9 @@ namespace SistemaVenta.BLL.Servicios
                 var listaMenus = tbResultado.ToList();
                 return _mapper.Map<List<MenuDTO>>(listaMenus);
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception("No se pudo obtener la lista de menu.", ex);
             }
 
         }

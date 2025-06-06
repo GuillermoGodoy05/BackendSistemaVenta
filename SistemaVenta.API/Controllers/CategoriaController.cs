@@ -30,13 +30,14 @@ namespace SistemaVenta.API.Controllers
             {
                 rsp.status = true;
                 rsp.value = await _categoriaServicio.Lista();
+                return Ok(rsp);
             }
             catch (Exception ex)
             {
                 rsp.status = false;
                 rsp.msg = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, rsp);
             }
-            return Ok(rsp);
         }
     }
 }

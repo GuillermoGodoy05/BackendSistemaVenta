@@ -29,13 +29,15 @@ namespace SistemaVenta.API.Controllers
             {
                 rsp.status = true;
                 rsp.value = await _productoServicio.Lista();
+                return Ok(rsp);
             }
             catch (Exception ex)
             {
                 rsp.status = false;
                 rsp.msg = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, rsp);
+
             }
-            return Ok(rsp);
         }
 
        
@@ -49,13 +51,15 @@ namespace SistemaVenta.API.Controllers
             {
                 rsp.status = true;
                 rsp.value = await _productoServicio.Crear(producto);
+                return Ok(rsp);
             }
             catch (Exception ex)
             {
                 rsp.status = false;
                 rsp.msg = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, rsp);
+
             }
-            return Ok(rsp);
         }
 
         [HttpPut]
@@ -68,13 +72,15 @@ namespace SistemaVenta.API.Controllers
             {
                 rsp.status = true;
                 rsp.value = await _productoServicio.Editar(producto);
+                return Ok(rsp);
             }
             catch (Exception ex)
             {
                 rsp.status = false;
                 rsp.msg = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, rsp);
+
             }
-            return Ok(rsp);
         }
 
         [HttpDelete]
@@ -87,13 +93,15 @@ namespace SistemaVenta.API.Controllers
             {
                 rsp.status = true;
                 rsp.value = await _productoServicio.Eliminar(id);
+                return Ok(rsp);
             }
             catch (Exception ex)
             {
                 rsp.status = false;
                 rsp.msg = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, rsp);
+
             }
-            return Ok(rsp);
         }
 
     }
