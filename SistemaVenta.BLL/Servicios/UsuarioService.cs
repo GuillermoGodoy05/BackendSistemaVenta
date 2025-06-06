@@ -79,15 +79,17 @@ namespace SistemaVenta.BLL.Servicios
         {
             try
             {
+                var existe = await _usuarioRepositorio.Obtener(u => u.Correo == modelo.Correo);
+
+                if (existe != null)
+                    throw new TaskCanceledException("Ya existe un usuario con ese correo");
+                
                 modelo.Clave = BCrypt.Net.BCrypt.HashPassword(modelo.Clave);
 
                 var usuarioCreado = await _usuarioRepositorio.Crear(_mapper.Map<Usuario>(modelo));
-                /*var existe = await _usuarioRepositorio.Obtener(u => u.Correo == modelo.Correo);*/
 
                 if (usuarioCreado.IdUsuario == 0) throw new TaskCanceledException("No se puedo crear");
                 
-               /* if (existe != null)
-                    throw new TaskCanceledException("Ya existe un usuario con ese correo");*/
 
                 var query = await _usuarioRepositorio.Consultar(u => u.IdUsuario == usuarioCreado.IdUsuario);
 
